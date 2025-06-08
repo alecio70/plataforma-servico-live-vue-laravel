@@ -11,11 +11,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
+  import api from '@/services/api';
 
-  const profissionais = ref([
-    { id: 1, nome: 'Carlos Silva', servico: 'Eletricista'},
-    { id: 2, nome: 'Ana Pereira', servico: 'Manicure'},
-    { id: 3, nome: 'João Souza', servico: 'Encanador'}
-  ])
+  const profissionais = ref([]);
+
+  const ListarProfissionais = async () => {
+    try {
+      const response = await api.get('/profissionais');
+      profissionais.value = response.data;
+    } catch (error) {
+      console.error('Erro ao buscar profissionais:', error);
+    }
+  }
+
+  onMounted(() => {
+    ListarProfissionais();
+  })
 </script>
